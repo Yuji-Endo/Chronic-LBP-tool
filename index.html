@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>慢性腰痛発症リスク(1年後)計算ツール</title>
+</head>
+<body>
+    <h1>慢性腰痛発症リスク(1年後)計算ツール</h1>
+    
+    <label for="age">年齢:</label>
+    <input type="number" id="age" name="age" required><br><br>
+    
+    <label for="gender">性別:</label>
+    <select id="gender" name="gender">
+        <option value="0">男性</option>
+        <option value="1">女性</option>
+    </select><br><br>
+
+    <label for="cfd">CFD（下顎床距離）:</label>
+    <input type="number" id="cfd" name="cfd" required><br><br>
+
+    <label for="ffd">FFD（腰椎前屈で床に指がつく）:</label>
+    <select id="ffd" name="ffd">
+        <option value="0">いいえ</option>
+        <option value="1">はい</option>
+    </select><br><br>
+
+    <button onclick="calculateRisk()">リスクを計算</button>
+
+    <p id="result"></p>
+
+    <script>
+        function calculateRisk() {
+            // 入力値を取得
+            const age = document.getElementById('age').value;
+            const gender = document.getElementById('gender').value;
+            const cfd = document.getElementById('cfd').value;
+            const ffd = document.getElementById('ffd').value;
+            
+            // 値が正しく取得されているか確認
+            console.log("Age: " + age);
+            console.log("Gender: " + gender);
+            console.log("CFD: " + cfd);
+            console.log("FFD: " + ffd);
+
+            // CFDを内部でマイナスとして扱う
+            const cfd_negative = -Math.abs(cfd);
+            console.log("CFD (Negative): " + cfd_negative);
+
+            // リスクを計算する
+            const risk = 1 / (1 + Math.exp(-(age * -0.024 + cfd_negative * 0.074 + ffd * -0.023 + gender * 0.096 + 0.589)));
+            console.log("Calculated Risk: " + risk);
+
+            // 結果を表示
+            document.getElementById('result').innerText = '1年後の腰痛発症リスク: ' + (risk * 100).toFixed(2) + '%';
+        }
+    </script>
+</body>
+</html>
